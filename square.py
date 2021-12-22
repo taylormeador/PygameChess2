@@ -7,20 +7,31 @@ import king
 import main
 
 SQ_SIZE = 64
-files_to_cols_white = {"a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f": 5, "g": 6, "h": 7}
-files_to_cols_black = {"a": 7, "b": 6, "c": 5, "d": 4, "e": 3, "f": 2, "g": 1, "h": 0}
+files_to_cols_white = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
+files_to_cols_black = {'a': 7, 'b': 6, 'c': 5, 'd': 4, 'e': 3, 'f': 2, 'g': 1, 'h': 0}
 ranks_to_rows = {1: 7, 2: 6, 3: 5, 4: 4, 5: 3, 6: 2, 7: 1, 8: 0}
 
 
 class Square:
     def __init__(self, name, piece, color):
-        self.name = name
-        self.piece = piece
-        self.color = color
-        self.row = ranks_to_rows[int(name[1])] if main.white_pov else int(name[1]) - 1
-        self.col = files_to_cols_white[name[0]] if main.white_pov else files_to_cols_black[name[0]]
-        self.x = self.col * SQ_SIZE
-        self.y = self.row * SQ_SIZE
+        self.name = name  # a1, h3, etc.
+        self.piece = piece  # piece object instance
+        self.color = color  # light or dark
+        self.row = ranks_to_rows[int(name[1])]  # gs board lists rows 0-7
+        self.col = files_to_cols_white[name[0]]  # gs board lists cols 0-7
+        self.visual_row = ranks_to_rows[int(name[1])] if main.white_pov else int(name[1]) - 1  # visual row 0-7
+        self.visual_col = files_to_cols_white[name[0]] if main.white_pov else files_to_cols_black[name[0]]  # visual col 0-7
+        self.x = self.visual_col * SQ_SIZE  # pygame draw x
+        self.y = self.visual_row * SQ_SIZE  # pygame draw y
+        self.is_attacked = []  # list of pieces that are attacking the square
+
+    def __repr__(self):
+        rep = 'Square ' + self.name + ': ' + str(self.piece)
+        return rep
+
+    def location(self):
+        location = (self.row, self.col)
+        return location
 
 
 # initialize squares
@@ -104,3 +115,12 @@ e6 = Square("e6", 0, "light")
 f6 = Square("f6", 0, "dark")
 g6 = Square("g6", 0, "light")
 h6 = Square("h6", 0, "dark")
+
+squares_from_locations = {'a8': a8, 'b8': b8, 'c8': c8, 'd8': d8, 'e8': e8, 'f8': f8, 'g8': g8, 'h8': h8,
+                          'a7': a7, 'b7': b7, 'c7': c7, 'd7': d7, 'e7': e7, 'f7': f7, 'g7': g7, 'h7': h7,
+                          'a6': a6, 'b6': b6, 'c6': c6, 'd6': d6, 'e6': e6, 'f6': f6, 'g6': g6, 'h6': h6,
+                          'a5': a5, 'b5': b5, 'c5': c5, 'd5': d5, 'e5': e5, 'f5': f5, 'g5': g5, 'h5': h5,
+                          'a4': a4, 'b4': b4, 'c4': c4, 'd4': d4, 'e4': e4, 'f4': f4, 'g4': g4, 'h4': h4,
+                          'a3': a3, 'b3': b3, 'c3': c3, 'd3': d3, 'e3': e3, 'f3': f3, 'g3': g3, 'h3': h3,
+                          'a2': a2, 'b2': b2, 'c2': c2, 'd2': d2, 'e2': e2, 'f2': f2, 'g2': g2, 'h2': h2,
+                          'a1': a1, 'b1': b1, 'c1': c2, 'd1': d3, 'e1': e4, 'f1': f1, 'g1': g1, 'h1': h1}
